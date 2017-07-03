@@ -32,7 +32,7 @@ namespace Examples
             var response = await client.GetAsync($"api/v1/authenticate?{queryString}");
 
             var token = await response.Content.ReadAsStringAsync();
-            var authInfo = username + ":" + token.Replace("\"", string.Empty);;
+            var authInfo = username + ":" + token.Replace("\"", string.Empty);
             var authKey = Convert.ToBase64String(Encoding.UTF8.GetBytes(authInfo));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authKey);
 
