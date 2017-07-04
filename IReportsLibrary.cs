@@ -2014,10 +2014,10 @@ public partial class IReportsLibrary
         var urlBuilder_ = new System.Text.StringBuilder();
         urlBuilder_.Append(BaseUrl).Append("/libraries/{libraryCode}/products/{productCode}/content");
         urlBuilder_.Replace(
-            "{LibraryCode}",
+            "{libraryCode}",
             Uri.EscapeDataString(Convert.ToString(libraryCode, CultureInfo.InvariantCulture)));
         urlBuilder_.Replace(
-            "{ProductCode}",
+            "{productCode}",
             Uri.EscapeDataString(Convert.ToString(productCode, CultureInfo.InvariantCulture)));
 
         var client_ = _httpClient;
