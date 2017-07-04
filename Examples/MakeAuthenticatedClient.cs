@@ -15,9 +15,8 @@ namespace Examples
             var iReportsLibrary = new IReportsLibrary(baseUrl, httpClient);
 
             var token = await iReportsLibrary.GetAuthenticationTokenAsync(username, password);
-
+            
             var authInfo = username + ":" + token;
-
             var authKey = Convert.ToBase64String(Encoding.UTF8.GetBytes(authInfo));
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authKey);

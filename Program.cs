@@ -14,7 +14,7 @@ namespace IReportsApiExamples
 
         private static async Task MainAsync()
         {
-            using (var iReportsLibrary = await MakeAuthenticatedClient.DoWork("https://www.ireportsdevelopment.com/Test/api/v1", "Seth", "seth1612!"))
+            using (var iReportsLibrary = await MakeAuthenticatedClient.DoWork("BASE_URL", "USERNAME", "PASSWORD"))
             {
                 await SearchProduct.GetProducts(iReportsLibrary, 0, 10);
             }
