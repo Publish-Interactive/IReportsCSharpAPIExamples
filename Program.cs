@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Examples;
 
@@ -13,9 +14,9 @@ namespace IReportsApiExamples
 
         private static async Task MainAsync()
         {
-            using (var client = await MakeAuthenticatedClient.DoWork("https://www.ireportsdevelopment.com/Test/", "Seth", "seth1612!"))
+            using (var iReportsLibrary = await MakeAuthenticatedClient.DoWork("BASE_URL", "USERNAME", "PASSWORD"))
             {
-                await SearchProduct.GetProducts(client, 0, 10);
+                await SearchProduct.GetProducts(iReportsLibrary, 0, 10);
             }
 
         }
