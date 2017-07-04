@@ -1881,10 +1881,10 @@ public partial class IReportsLibrary
         urlBuilder_.Append(BaseUrl)
                     .Append("/libraries/{libraryCode}/products/{productCode}/attachments/{fileCode}");
         urlBuilder_.Replace(
-            "{LibraryCode}",
+            "{libraryCode}",
             Uri.EscapeDataString(Convert.ToString(libraryCode, CultureInfo.InvariantCulture)));
         urlBuilder_.Replace(
-            "{ProductCode}",
+            "{productCode}",
             Uri.EscapeDataString(Convert.ToString(productCode, CultureInfo.InvariantCulture)));
         urlBuilder_.Replace(
             "{fileCode}",
