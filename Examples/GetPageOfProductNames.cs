@@ -11,7 +11,7 @@ namespace Examples
 {
     public class GetPageOfProductNames
     {
-        /// <summary>Get a list of products with </summary>
+        /// <summary>Get a list of products with a specified base index and size</summary>
         /// <param name="iReportsLibrary">The IReportsLibrary object to use</param>
         /// <param name="skip">The zero based index of the product to start at</param>
         /// <param name="take">The number of products to retrieve</param>
