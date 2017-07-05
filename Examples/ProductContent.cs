@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace IReportsApiExamples.Examples
@@ -7,10 +8,12 @@ namespace IReportsApiExamples.Examples
     {
         public static async Task DoWork(IReportsLibrary iReportsLibrary)
         {
-            await GetAttachment(iReportsLibrary, "PRODUCT_CODE", "FILE_CODE");
+
+            FileDownloadModel fileModel = await GetAttachment(iReportsLibrary, "PRODUCT_CODE", "FILE_CODE");
+            SaveAttachementToWorkingDirectory(fileModel);
+
             await GetContent(iReportsLibrary, "PRODUCT_CODE");
             await GetToc(iReportsLibrary, "PRODUCT_CODE");
-
             await GetPrintCopiesByExtension(iReportsLibrary, "PRODUCT_CODE", "FILE_EXTENSION");
         }
 
@@ -28,12 +31,18 @@ namespace IReportsApiExamples.Examples
         public static async Task<FileDownloadModel> GetAttachment(
             IReportsLibrary iReportsLibrary, string productCode, string fileCode)
         {
-            FileDownloadModel attachmentModel = await iReportsLibrary.GetAttachmentAsync(
+            FileDownloadModel attachmentModel = await iReportsLibrary.GetAttachmentAsync(           
                 "reports", productCode, fileCode);
 
             Console.WriteLine($"File name = {attachmentModel.Name}");
 
             return attachmentModel;
+        }
+
+        public static void SaveAttachementToWorkingDirectory(FileDownloadModel fileModel){
+            FileStream fileStream = File.Create($"{Directory.GetCurrentDirectory()}/{fileModel.Name}");
+            byte[] data = fileModel.Content;
+            fileStream.WriteAsync(data, 0, data.Length);
         }
 
         public static async Task<ProductContentModel> GetContent(
