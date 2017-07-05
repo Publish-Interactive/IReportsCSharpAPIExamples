@@ -30,15 +30,15 @@ namespace IReportsApiExamples.Examples
                 Console.WriteLine(
                     $@"Created new Saved Search with a title of '{searchTerms}'
                     which is shared and has the specified search terms");
-            }
-            else
-            {
-                savedSearchModel.IsShared = true;
 
-                PutSavedSearch(iReportsLibrary, username, savedSearchModel);
-
-                Console.WriteLine("Saved Search already exists. It is now shared.");
+                return;
             }
+
+            savedSearchModel.IsShared = true;
+
+            PutSavedSearch(iReportsLibrary, username, savedSearchModel);
+
+            Console.WriteLine("Saved Search already exists. It is now shared.");
         }
 
         /// <summary>Loops through all the saved searches of the user and returns whether a saved search already
