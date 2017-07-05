@@ -12873,9 +12873,9 @@ public partial class ProductSearchParametersForm : System.ComponentModel.INotify
     private System.Collections.ObjectModel.ObservableCollection<string> _categoryPaths;
     private string _orderBy;
     private bool? _includeUnlicensed = false;
-    private bool? _includePrivate = true;
-    private bool? _includeComingSoon = true;
-    private bool? _includeArchived = true;
+    private bool? _includePrivate = false;
+    private bool? _includeComingSoon = false;
+    private bool? _includeArchived = false;
     private string _maxAge;
     private System.Collections.ObjectModel.ObservableCollection<Anonymous> _productTypes;
 
