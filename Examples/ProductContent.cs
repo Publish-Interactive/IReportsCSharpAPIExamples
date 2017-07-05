@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace IReportsApiExamples.Examples
@@ -7,10 +8,11 @@ namespace IReportsApiExamples.Examples
     {
         public static async Task DoWork(IReportsLibrary iReportsLibrary)
         {
-            await GetAttachment(iReportsLibrary, "PRODUCT_CODE", "FILE_CODE");
+            FileDownloadModel fileModel = await GetAttachment(iReportsLibrary, "PRODUCT_CODE", "FILE_CODE");
+            SaveAttachementToWorkingDirectory(fileModel);
+
             await GetContent(iReportsLibrary, "PRODUCT_CODE");
             await GetToc(iReportsLibrary, "PRODUCT_CODE");
-
             await GetPrintCopiesByExtension(iReportsLibrary, "PRODUCT_CODE", "FILE_EXTENSION");
         }
 
@@ -34,6 +36,11 @@ namespace IReportsApiExamples.Examples
             Console.WriteLine($"File name = {attachmentModel.Name}");
 
             return attachmentModel;
+        }
+
+        public static void SaveAttachementToWorkingDirectory(FileDownloadModel fileModel)
+        {
+            File.WriteAllBytes(fileModel.Name, fileModel.Content);
         }
 
         public static async Task<ProductContentModel> GetContent(
