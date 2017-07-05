@@ -8,8 +8,7 @@ namespace IReportsApiExamples.Examples
     {
         public static async Task DoWork(IReportsLibrary iReportsLibrary)
         {
-
-            FileDownloadModel fileModel = await GetAttachment(iReportsLibrary, "PRODUCT_CODE", "FILE_CODE");
+            FileDownloadModel fileModel = await GetAttachment(iReportsLibrary, "ER123", "ER123.pdf");
             SaveAttachementToWorkingDirectory(fileModel);
 
             await GetContent(iReportsLibrary, "PRODUCT_CODE");
@@ -31,7 +30,7 @@ namespace IReportsApiExamples.Examples
         public static async Task<FileDownloadModel> GetAttachment(
             IReportsLibrary iReportsLibrary, string productCode, string fileCode)
         {
-            FileDownloadModel attachmentModel = await iReportsLibrary.GetAttachmentAsync(           
+            FileDownloadModel attachmentModel = await iReportsLibrary.GetAttachmentAsync(
                 "reports", productCode, fileCode);
 
             Console.WriteLine($"File name = {attachmentModel.Name}");
@@ -41,9 +40,7 @@ namespace IReportsApiExamples.Examples
 
         public static void SaveAttachementToWorkingDirectory(FileDownloadModel fileModel)
         {
-            FileStream fileStream = File.Create($"{Directory.GetCurrentDirectory()}/{fileModel.Name}");
-            byte[] data = fileModel.Content;
-            fileStream.WriteAsync(data, 0, data.Length);
+            File.WriteAllBytes(fileModel.Name, fileModel.Content);
         }
 
         public static async Task<ProductContentModel> GetContent(
