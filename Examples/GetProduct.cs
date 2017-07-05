@@ -9,11 +9,11 @@ using Newtonsoft.Json;
 
 namespace Examples
 {
-    public class SearchProduct
+    public class GetProduct
     {
-        public static async Task GetProducts(IReportsLibrary iReportsLibrary, int skip, int take)
+        public static async Task<ProductSearchResults> GetProducts(IReportsLibrary iReportsLibrary, int skip, int take)
         {
-            ProductSearchResults result = await iReportsLibrary.GetProductsAsync(
+            ProductSearchResults productResults = await iReportsLibrary.GetProductsAsync(
                 null,
                 null,
                 null,
@@ -28,10 +28,12 @@ namespace Examples
                 null,
                 null);
 
-            foreach (var product in result.Products)
+            foreach (var product in productResults.Products)
             {
                 Console.WriteLine($"Title = {product.Title}");
             }
+
+            return productResults;
         }
     }
 }

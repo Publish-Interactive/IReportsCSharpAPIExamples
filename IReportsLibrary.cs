@@ -5,6 +5,7 @@
 //----------------------
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
 using System.Text;
@@ -1881,10 +1882,10 @@ public partial class IReportsLibrary
         urlBuilder_.Append(BaseUrl)
                     .Append("/libraries/{libraryCode}/products/{productCode}/attachments/{fileCode}");
         urlBuilder_.Replace(
-            "{LibraryCode}",
+            "{libraryCode}",
             Uri.EscapeDataString(Convert.ToString(libraryCode, CultureInfo.InvariantCulture)));
         urlBuilder_.Replace(
-            "{ProductCode}",
+            "{productCode}",
             Uri.EscapeDataString(Convert.ToString(productCode, CultureInfo.InvariantCulture)));
         urlBuilder_.Replace(
             "{fileCode}",
@@ -2014,10 +2015,10 @@ public partial class IReportsLibrary
         var urlBuilder_ = new System.Text.StringBuilder();
         urlBuilder_.Append(BaseUrl).Append("/libraries/{libraryCode}/products/{productCode}/content");
         urlBuilder_.Replace(
-            "{LibraryCode}",
+            "{libraryCode}",
             Uri.EscapeDataString(Convert.ToString(libraryCode, CultureInfo.InvariantCulture)));
         urlBuilder_.Replace(
-            "{ProductCode}",
+            "{productCode}",
             Uri.EscapeDataString(Convert.ToString(productCode, CultureInfo.InvariantCulture)));
 
         var client_ = _httpClient;
@@ -10532,14 +10533,14 @@ public partial class ProductAuthorForm : System.ComponentModel.INotifyPropertyCh
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "9.2.4.0")]
 public partial class ProductTocModel : System.ComponentModel.INotifyPropertyChanged
 {
-    private ProductTocEntryModel _chapters;
-    private ProductTocEntryModel _attachments;
+    private List<ProductTocEntryModel> _chapters;
+    private List<ProductTocEntryModel> _attachments;
 
     [Newtonsoft.Json.JsonProperty(
         "Chapters",
         Required = Newtonsoft.Json.Required.Default,
         NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public ProductTocEntryModel Chapters
+    public List<ProductTocEntryModel> Chapters
     {
         get { return _chapters; }
         set
@@ -10556,7 +10557,7 @@ public partial class ProductTocModel : System.ComponentModel.INotifyPropertyChan
         "Attachments",
         Required = Newtonsoft.Json.Required.Default,
         NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public ProductTocEntryModel Attachments
+    public List<ProductTocEntryModel> Attachments
     {
         get { return _attachments; }
         set
