@@ -11,6 +11,10 @@ namespace Examples
 {
     public class GetPageOfProductNames
     {
+        /// <summary>Get a list of products with </summary>
+        /// <param name="iReportsLibrary">The IReportsLibrary object to use</param>
+        /// <param name="skip">The zero based index of the product to start at</param>
+        /// <param name="take">The number of products to retrieve</param>
         public static async Task<ProductSearchResults> GetProducts(
             IReportsLibrary iReportsLibrary, int skip, int take)
         {
