@@ -8,7 +8,7 @@ namespace IReportsApiExamples.Examples
     {
         public static async Task DoWork(IReportsLibrary iReportsLibrary)
         {
-            FileDownloadModel fileModel = await GetAttachment(iReportsLibrary, "ER123", "ER123.pdf");
+            FileDownloadModel fileModel = await GetAttachment(iReportsLibrary, "PRODUCT_CODE", "FILE_CODE");
             SaveAttachementToWorkingDirectory(fileModel);
 
             await GetContent(iReportsLibrary, "PRODUCT_CODE");
