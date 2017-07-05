@@ -14,17 +14,30 @@ namespace IReportsApiExamples.Examples
         /// <param name="iReportsLibrary">The IReportsLibrary object to use</param>
         /// <param name="username">The username of the desired user</param>
         /// <param name="searchTerms">The desired search terms to search for in all the saved searches</param>
-        public static async Task DoWork(IReportsLibrary iReportsLibrary, string username
-                                        , string searchTerms)
+        public static async Task DoWork(IReportsLibrary iReportsLibrary, string username,
+                                        string searchTerms)
         {
             ObservableCollection<SavedSearchListModel> savedSearchesList
                         = await iReportsLibrary.GetSavedSearchesAsync(username);
 
-            if (!await SavedSearchExistsAsync(iReportsLibrary, savedSearchesList, username, searchTerms))
+            SavedSearchModel savedSearchModel = await FindSavedSearch(iReportsLibrary, savedSearchesList, username, searchTerms);
+
+            if (savedSearchModel == null)
             {
+                await iReportsLibrary.PostSavedSearchAsync(
+                    username, CreateNewSavedSearchWithSpecifiedSearchTerms(searchTerms));
+
                 Console.WriteLine(
-                    $@"Created new Saved Search with a title of '{searchTerms}' 
+                    $@"Created new Saved Search with a title of '{searchTerms}'
                     which is shared and has the specified search terms");
+            }
+            else
+            {
+                savedSearchModel.IsShared = true;
+
+                PutSavedSearch(iReportsLibrary, username, savedSearchModel);
+
+                Console.WriteLine("Saved Search already exists. It is now shared.");
             }
         }
 
@@ -35,31 +48,22 @@ namespace IReportsApiExamples.Examples
         /// <param name="savedSearchesList">The list of saved searches from the user</param>
         /// <param name="username">The username of the user</param>        
         /// <param name="specifiedSearchTerms">The search terms to look for in the saved searches</param>
-        private static async Task<bool> SavedSearchExistsAsync(
-            IReportsLibrary iReportsLibrary, ObservableCollection<SavedSearchListModel> savedSearchesList
-            , string username, string specifiedSearchTerms)
+        private static async Task<SavedSearchModel> FindSavedSearch(
+            IReportsLibrary iReportsLibrary, ObservableCollection<SavedSearchListModel> savedSearchesList,
+                                             string username, string specifiedSearchTerms)
         {
-            for (int i = 0; i < savedSearchesList.Count; i++)
+            foreach (var model in savedSearchesList)
             {
                 SavedSearchModel savedSearch = await iReportsLibrary.GetSavedSearchAsync(
-                    username, savedSearchesList[i].Id);
+                    username, model.Id);
 
                 if (savedSearch.SearchParameters.Terms.Equals(specifiedSearchTerms))
                 {
-                    savedSearch.IsShared = true;
-
-                    PutSavedSearchAsync(iReportsLibrary, username, savedSearch);
-
-                    Console.WriteLine("Saved Search already exists. It is now shared.");
-
-                    return true;
+                    return savedSearch;
                 }
             }
 
-            await iReportsLibrary.PostSavedSearchAsync(
-                username, CreateNewSavedSearchWithSpecifiedSearchTerms(specifiedSearchTerms));
-
-            return false;
+            return null;
         }
 
         /// <summary>Deletes the old saved search which isn't shared and posts the new shared saved search.
@@ -68,7 +72,7 @@ namespace IReportsApiExamples.Examples
         /// <param name="iReportsLibrary">The IReportsLibrary object to use</param>
         /// <param name="username">The username of the user</param>        
         /// <param name="oldSavedSearch">The old saved search to delete and retrieve the data from</param>
-        private static async void PutSavedSearchAsync(
+        private static async void PutSavedSearch(
             IReportsLibrary iReportsLibrary, string username, SavedSearchModel oldSavedSearch)
         {
             await iReportsLibrary.DeleteSavedSearchAsync(username, oldSavedSearch.Id);
@@ -118,6 +122,7 @@ namespace IReportsApiExamples.Examples
             return new AddSavedSearchForm
             {
                 Title = searchTerms,
+                IsShared = true,
                 SearchParameters = searchParameters
             };
         }
