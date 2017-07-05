@@ -18,7 +18,8 @@ namespace IReportsApiExamples
             using (var iReportsLibrary = await MakeAuthenticatedClient.DoWork(
                 "BASE_URL", "USERNAME", "PASSWORD"))
             {
-                await GetProduct.GetProducts(iReportsLibrary, 0, 10);
+                await ShareSavedSearch.DoWork(iReportsLibrary, "USERNAME", "SEARCH_TERMS");
+                await GetPageOfProductNames.GetProducts(iReportsLibrary, 0, 10);
                 await ProductContent.DoWork(iReportsLibrary);
             }
         }
