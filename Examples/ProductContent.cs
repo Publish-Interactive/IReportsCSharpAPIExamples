@@ -39,7 +39,8 @@ namespace IReportsApiExamples.Examples
             return attachmentModel;
         }
 
-        public static void SaveAttachementToWorkingDirectory(FileDownloadModel fileModel){
+        public static void SaveAttachementToWorkingDirectory(FileDownloadModel fileModel)
+        {
             FileStream fileStream = File.Create($"{Directory.GetCurrentDirectory()}/{fileModel.Name}");
             byte[] data = fileModel.Content;
             fileStream.WriteAsync(data, 0, data.Length);
