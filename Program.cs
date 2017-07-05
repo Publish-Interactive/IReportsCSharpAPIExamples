@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Examples;
+using IReportsApiExamples.Examples;
 
 namespace IReportsApiExamples
 {
@@ -14,14 +15,11 @@ namespace IReportsApiExamples
 
         private static async Task MainAsync()
         {
-            using (var iReportsLibrary = await Examples.MakeAuthenticatedClient.DoWork("https://www.ireportsdevelopment.com/Test/api/v1", "Seth", "seth1612!"))
+            using (var iReportsLibrary = await MakeAuthenticatedClient.DoWork("https://www.ireportsdevelopment.com/Test/api/v1", "Seth", "seth1612!"))
             {
-                await SearchProduct.GetProductAttachment(iReportsLibrary, "ER123", "ER123.pdf");
-                await SearchProduct.GetProductContent(iReportsLibrary, "ER113Brief");
-                await SearchProduct.GetProductToc(iReportsLibrary, "ER123");
-                await SearchProduct.GetProducts(iReportsLibrary, 0, 10);
+                await GetProduct.GetProducts(iReportsLibrary, 0, 10);
+                await ProductContent.DoWork(iReportsLibrary);
             }
-
         }
     }
 }
