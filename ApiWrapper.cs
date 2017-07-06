@@ -878,7 +878,7 @@ public partial class ApiWrapper
     {
         var content = new StringContent(JsonConvert.SerializeObject(body));
         content.Headers.ContentType.MediaType = "application/json";
-        using (var response = await this.httpClient.PostAsync(url, content))
+        using (var response = await this.httpClient.PutAsync(url, content))
         {
             if (responseCode.Any(c => response.StatusCode == c))
             {
