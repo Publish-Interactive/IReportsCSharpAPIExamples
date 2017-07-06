@@ -562,10 +562,10 @@ public partial class ApiWrapper
     /// <summary>Gets all the subscribers in the account with the specified name</summary>
     /// <param name="accountName">The name of the account to retrieve the subscribers from</param>
     /// <returns>Successful operation</returns>
-    public Task<SubscriberDataModel> GetSubscribersAsync(string accountName)
+    public Task<IList<SubscriberDataModel>> GetSubscribersAsync(string accountName)
     {
         var url = $"accounts/{accountName}/subscribers";
-        return this.Get<SubscriberDataModel>(url, HttpStatusCode.OK);
+        return this.Get<IList<SubscriberDataModel>>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Creates or updates the subscriber with the specified username</summary>
