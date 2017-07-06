@@ -10,7 +10,9 @@ namespace Examples
     class MakeAuthenticatedClient
     {
         public static async Task<IReportsLibrary> DoWork(
-            string baseUrl, string username, string password)
+            string baseUrl,
+            string username,
+            string password)
         {
             var httpClient = new HttpClient();
             var iReportsLibrary = new IReportsLibrary(baseUrl, httpClient);

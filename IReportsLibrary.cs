@@ -32,7 +32,7 @@ public partial class IReportsLibrary
     /// <returns>The document uploaded successfully, but not processed. Returns the id to use in future requests.</returns>
     public Task<int> PostImportAsync(string libraryCode, string productCode, ProductImportDataModel body)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/imports";
+        var url = $"libraries/{libraryCode}/products/{productCode}/imports";
         return this.Post<int>(url, body, HttpStatusCode.Accepted);
     }
 
@@ -42,14 +42,14 @@ public partial class IReportsLibrary
     /// <param name="libraryCode"></param>
     public Task<ProductUploadStatusDataModel> GetImportStatusAsync(string libraryCode, string productCode, int id)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/imports/{id}";
+        var url = $"libraries/{libraryCode}/products/{productCode}/imports/{id}";
         return this.Get<ProductUploadStatusDataModel>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Gets the styles used during import of documents.</summary>
     public Task<ImportedDocumentStylesDataModel> GetImportStylesAsync()
     {
-        var url = "/content/import/styles";
+        var url = "content/import/styles";
         return this.Get<ImportedDocumentStylesDataModel>(url, HttpStatusCode.OK);
     }
 
@@ -57,7 +57,7 @@ public partial class IReportsLibrary
     /// <returns>The styles were successfully updated</returns>
     public async Task PutImportStylesAsync(ImportStylesForm body)
     {
-        var url = "/content/import/styles";
+        var url = "content/import/styles";
         await this.Put(url, body, HttpStatusCode.OK);
     }
 
@@ -65,11 +65,11 @@ public partial class IReportsLibrary
     /// <param name="username">The username to authenticate as</param>
     /// <param name="password">The password of the user to authenticate as</param>
     /// <returns>The authentication key to use in future API requests.</returns>
-    public Task<string> GetAuthenticationTokenAsync(string username, string password)
+    public async Task<string> GetAuthenticationTokenAsync(string username, string password)
     {
-        var query = CreateQueryString(new { username, password });
-        var url = $"/authenticate?{query}";
-        return this.Get<string>(url, HttpStatusCode.OK);
+        var query = await CreateQueryString(new { username, password });
+        var url = $"authenticate?{query}";
+        return await this.Get<string>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Search for products</summary>
@@ -96,7 +96,7 @@ public partial class IReportsLibrary
     /// 
     /// E.g. "6m" for six months or "2y" for two years</param>
     /// <returns>A list of products</returns>
-    public Task<ProductSearchResults> GetProductsAsync(
+    public async Task<ProductSearchResults> GetProductsAsync(
         string terms,
         System.Collections.Generic.IEnumerable<int> categories,
         System.Collections.Generic.IEnumerable<string> categoryPaths,
@@ -111,7 +111,7 @@ public partial class IReportsLibrary
         System.DateTime? updatedSince,
         string maxAge)
     {
-        var query = CreateQueryString(
+        var query = await CreateQueryString(
             new
                 {
                     terms,
@@ -128,15 +128,15 @@ public partial class IReportsLibrary
                     updatedSince,
                     maxAge
                 });
-        var url = $"/products?{query}";
-        return this.Get<ProductSearchResults>(url, HttpStatusCode.OK);
+        var url = $"products?{query}";
+        return await this.Get<ProductSearchResults>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Get all current product links</summary>
     /// <returns>Successful operation</returns>
     public Task<List<ProductLinkModel>> GetAllProductLinksAsync()
     {
-        var url = "/products/links";
+        var url = "products/links";
         return this.Get<List<ProductLinkModel>>(url, HttpStatusCode.OK);
     }
 
@@ -145,7 +145,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation</returns>
     public Task<ProductLinkDetailsModel> PostProductLinkAsync(ProductLinkDetailsForm body)
     {
-        var url = "/products/links";
+        var url = "products/links";
         return this.Post<ProductLinkDetailsModel>(url, body, HttpStatusCode.OK);
     }
 
@@ -154,7 +154,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation</returns>
     public Task<ProductLinkDetailsModel> GetProductLinkAsync(int id)
     {
-        var url = $"/products/links/{id}";
+        var url = $"products/links/{id}";
         return this.Get<ProductLinkDetailsModel>(url, HttpStatusCode.OK);
     }
 
@@ -164,7 +164,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation</returns>
     public Task<ProductLinkDetailsModel> PutProductLinkAsync(int id, ProductLinkDetailsForm body)
     {
-        var url = $"/products/links/{id}";
+        var url = $"products/links/{id}";
         return this.Put<ProductLinkDetailsModel>(url, body, HttpStatusCode.OK);
     }
 
@@ -173,7 +173,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation</returns>
     public Task DeleteProductLinkAsync(int id)
     {
-        var url = $"/products/links/{id}";
+        var url = $"products/links/{id}";
         return this.Delete(url, HttpStatusCode.NoContent);
     }
 
@@ -183,15 +183,15 @@ public partial class IReportsLibrary
     /// <param name="includeExtendedMetadata">Whether to include extended metadata, categories, authors, product links and buy it now link in the result</param>
     /// <param name="includeToc">Whether to include the table of contents of the product (will display appropriately for the current user)</param>
     /// <returns>Successful operation.</returns>
-    public Task<ProductMetadataModel> GetProductByCodeAsync(
+    public async Task<ProductMetadataModel> GetProductByCodeAsync(
         string libraryCode,
         string productCode,
         bool? includeExtendedMetadata,
         bool? includeToc)
     {
-        var query = CreateQueryString(new { includeExtendedMetadata, includeToc });
-        var url = $"/libraries/{libraryCode}/products/{productCode}?{query}";
-        return this.Get<ProductMetadataModel>(url, HttpStatusCode.OK);
+        var query = await CreateQueryString(new { includeExtendedMetadata, includeToc });
+        var url = $"libraries/{libraryCode}/products/{productCode}?{query}";
+        return await this.Get<ProductMetadataModel>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Add or update a product</summary>
@@ -204,7 +204,7 @@ public partial class IReportsLibrary
         string productCode,
         ProductMetadataForm body)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}";
+        var url = $"libraries/{libraryCode}/products/{productCode}";
         return this.Put<ProductMetadataModel>(url, body, HttpStatusCode.Created);
     }
 
@@ -224,15 +224,15 @@ public partial class IReportsLibrary
     /// <param name="extension">A file extension to look for (by default doc, pdf, xls and ppt are supported)</param>
     /// <param name="fileCode">The code of the file desired</param>
     /// <returns>Successful operation.</returns>
-    public Task<FileDownloadModel> GetPrintCopyAsync(
+    public async Task<FileDownloadModel> GetPrintCopyAsync(
         string libraryCode,
         string productCode,
         string extension,
         string fileCode)
     {
-        var query = CreateQueryString(new { fileCode });
-        var url = $"/libraries/{libraryCode}/products/{productCode}/printcopies/{extension}?{query}";
-        return this.Get<FileDownloadModel>(url, HttpStatusCode.OK);
+        var query = await CreateQueryString(new { fileCode });
+        var url = $"libraries/{libraryCode}/products/{productCode}/printcopies/{extension}?{query}";
+        return await this.Get<FileDownloadModel>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Get an attachment file</summary>
@@ -242,7 +242,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation.</returns>
     public Task<FileDownloadModel> GetAttachmentAsync(string libraryCode, string productCode, string fileCode)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/attachments/{fileCode}";
+        var url = $"libraries/{libraryCode}/products/{productCode}/attachments/{fileCode}";
         return this.Get<FileDownloadModel>(url, HttpStatusCode.OK);
     }
 
@@ -252,7 +252,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation.</returns>
     public Task<ProductContentModel> GetContentAsync(string libraryCode, string productCode)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/content";
+        var url = $"libraries/{libraryCode}/products/{productCode}/content";
         return this.Get<ProductContentModel>(url, HttpStatusCode.OK);
     }
 
@@ -262,7 +262,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation.</returns>
     public Task<ProductExtendedMetadataModel> GetExtendedMetadataAsync(string libraryCode, string productCode)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/metadata";
+        var url = $"libraries/{libraryCode}/products/{productCode}/metadata";
         return this.Get<ProductExtendedMetadataModel>(url, HttpStatusCode.OK);
     }
 
@@ -273,7 +273,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation.</returns>
     public Task PutExtendedMetadataAsync(string libraryCode, string productCode, ProductExtendedMetadataForm body)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/metadata";
+        var url = $"libraries/{libraryCode}/products/{productCode}/metadata";
         return this.Put(url, body, HttpStatusCode.NoContent);
     }
 
@@ -287,7 +287,7 @@ public partial class IReportsLibrary
         string productCode,
         List<ProductExtendedMetadataCommand> body)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/metadata";
+        var url = $"libraries/{libraryCode}/products/{productCode}/metadata";
         return this.Patch(url, body, HttpStatusCode.NoContent);
     }
 
@@ -296,11 +296,11 @@ public partial class IReportsLibrary
     /// <param name="productCode">The product code for the product to return</param>
     /// <param name="includeCategoryMetadata">Whether to include categories in the metadata</param>
     /// <returns>Successful operation.</returns>
-    public Task<string> GetSourceFilesAsync(string libraryCode, string productCode, bool? includeCategoryMetadata)
+    public async Task<string> GetSourceFilesAsync(string libraryCode, string productCode, bool? includeCategoryMetadata)
     {
-        var query = CreateQueryString(new { includeCategoryMetadata });
-        var url = $"/libraries/{libraryCode}/products/{libraryCode}/source?";
-        return this.Get<string>(url, HttpStatusCode.OK);
+        var query = await CreateQueryString(new { includeCategoryMetadata });
+        var url = $"libraries/{libraryCode}/products/{libraryCode}/source?";
+        return await this.Get<string>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Get the categories a product is in</summary>
@@ -308,11 +308,11 @@ public partial class IReportsLibrary
     /// <param name="productCode">The product code for the product to return</param>
     /// <param name="includeHidden">Whether to include hidden categories or not. Only available for users in role "ReportAdmin".</param>
     /// <returns>Successful operation.</returns>
-    public Task<List<string>> GetProductCategoriesAsync(string libraryCode, string productCode, bool? includeHidden)
+    public async Task<List<string>> GetProductCategoriesAsync(string libraryCode, string productCode, bool? includeHidden)
     {
-        var query = CreateQueryString(new { includeHidden });
-        var url = $"/libraries/{libraryCode}/products/{productCode}/categories?{query}";
-        return this.Get<List<string>>(url, HttpStatusCode.OK);
+        var query = await CreateQueryString(new { includeHidden });
+        var url = $"libraries/{libraryCode}/products/{productCode}/categories?{query}";
+        return await this.Get<List<string>>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Update the categories a product is in</summary>
@@ -322,7 +322,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation.</returns>
     public Task PutProductCategoriesAsync(string libraryCode, string productCode, List<string> body)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/categories";
+        var url = $"libraries/{libraryCode}/products/{productCode}/categories";
         return this.Put(url, body, HttpStatusCode.OK);
     }
 
@@ -332,18 +332,18 @@ public partial class IReportsLibrary
     /// 
     /// Warning: this can be a large amount of data and therefore slow. It is recommended to look up a specific category by id</param>
     /// <returns>Successful operation.</returns>
-    public Task<List<CategoryModel>> GetCategoriesAsync(bool? includeHidden, bool? includeDescendants)
+    public async Task<List<CategoryModel>> GetCategoriesAsync(bool? includeHidden, bool? includeDescendants)
     {
-        var query = CreateQueryString(new { includeHidden, includeDescendants });
-        var url = $"/categories?{query}";
-        return this.Get<List<CategoryModel>>(url, HttpStatusCode.OK);
+        var query = await CreateQueryString(new { includeHidden, includeDescendants });
+        var url = $"categories?{query}";
+        return await this.Get<List<CategoryModel>>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Adds a category</summary>
     /// <param name="body">The details of the category to add</param>
     public Task<CreatedCategoryModel> PostCategoryAsync(CategoryDataForm body)
     {
-        var url = "/categories";
+        var url = "categories";
         return this.Post<CreatedCategoryModel>(url, body, HttpStatusCode.OK);
     }
 
@@ -352,11 +352,11 @@ public partial class IReportsLibrary
     /// <param name="includeHidden">Whether to include hidden categories or not. Only available for users in role "ReportAdmin".</param>
     /// <param name="includeDescendants">Whether to include descendants of the category.</param>
     /// <returns>Successful operation.</returns>
-    public Task<CategoryModel> GetCategoryAsync(string id, bool? includeHidden, bool? includeDescendants)
+    public async Task<CategoryModel> GetCategoryAsync(string id, bool? includeHidden, bool? includeDescendants)
     {
-        var query = CreateQueryString(new { includeHidden, includeDescendants });
-        var url = $"/categories/{id}?";
-        return this.Get<CategoryModel>(url, HttpStatusCode.OK);
+        var query = await CreateQueryString(new { includeHidden, includeDescendants });
+        var url = $"categories/{id}?";
+        return await this.Get<CategoryModel>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Updates a category</summary>
@@ -365,7 +365,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation</returns>
     public Task PutCategoryAsync(string id, CategoryDataForm body)
     {
-        var url = $"/categories/{id}";
+        var url = $"categories/{id}";
         return this.Put(url, body, HttpStatusCode.OK);
     }
 
@@ -374,7 +374,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation</returns>
     public Task DeleteCategoryAsync(string id)
     {
-        var url = $"/categories/{id}";
+        var url = $"categories/{id}";
         return this.Delete(url, HttpStatusCode.NoContent);
     }
 
@@ -382,11 +382,11 @@ public partial class IReportsLibrary
     /// <param name="id">The id of the category</param>
     /// <param name="includeDescendants">If true then all products which are in decendant categories will be added to the list created</param>
     /// <returns>Successful operation.</returns>
-    public Task<List<ProductRevisionIdModel>> GetProductsInCategoryAsync(string id, bool? includeDescendants)
+    public async Task<List<ProductRevisionIdModel>> GetProductsInCategoryAsync(string id, bool? includeDescendants)
     {
-        var query = CreateQueryString(new { includeDescendants });
-        var url = $"/categories/{id}/products?{query}";
-        return this.Get<List<ProductRevisionIdModel>>(url, HttpStatusCode.OK);
+        var query = await CreateQueryString(new { includeDescendants });
+        var url = $"categories/{id}/products?{query}";
+        return await this.Get<List<ProductRevisionIdModel>>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Get the authors of a product</summary>
@@ -395,7 +395,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation.</returns>
     public Task<List<ProductAuthorForm>> GetAllProductAuthorsAsync(string libraryCode, string productCode)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/authors";
+        var url = $"libraries/{libraryCode}/products/{productCode}/authors";
         return this.Get<List<ProductAuthorForm>>(url, HttpStatusCode.OK);
     }
 
@@ -406,7 +406,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation.</returns>
     public Task PutProductAuthorsAsync(string libraryCode, string productCode, List<ProductAuthorForm> body)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/authors";
+        var url = $"libraries/{libraryCode}/products/{productCode}/authors";
         return this.Put(url, body, HttpStatusCode.NoContent);
     }
 
@@ -416,7 +416,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation.</returns>
     public Task<ProductTocModel> GetProductTocAsync(string libraryCode, string productCode)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/toc";
+        var url = $"libraries/{libraryCode}/products/{productCode}/toc";
         return this.Get<ProductTocModel>(url, HttpStatusCode.OK);
     }
 
@@ -426,7 +426,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation.</returns>
     public Task<string> GetProductTextIndexAsync(string libraryCode, string productCode)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/indexablecontent";
+        var url = $"libraries/{libraryCode}/products/{productCode}/indexablecontent";
         return this.Get<string>(url, HttpStatusCode.OK);
     }
 
@@ -441,7 +441,7 @@ public partial class IReportsLibrary
     /// <param name="category">When provided, filters the returned items to only those which are in the specified news category.</param>
     /// <param name="q">When provided, filters the returned items to only those which match the search term.</param>
     /// <returns>Successful operation.</returns>
-    public Task<NewsItemSearchResult> GetProductNewsItemsAsync(
+    public async Task<NewsItemSearchResult> GetProductNewsItemsAsync(
         string libraryCode,
         string productCode,
         DateTime? publishedAfter,
@@ -452,7 +452,7 @@ public partial class IReportsLibrary
         string category,
         string q)
     {
-        var query = CreateQueryString(
+        var query = await CreateQueryString(
             new
                 {
                     publishedAfter,
@@ -463,8 +463,8 @@ public partial class IReportsLibrary
                     category,
                     q
                 });
-        var url = $"/libraries/{libraryCode}/products/{productCode}/news-items?{query}";
-        return this.Get<NewsItemSearchResult>(url, HttpStatusCode.OK);
+        var url = $"libraries/{libraryCode}/products/{productCode}/news-items?{query}";
+        return await this.Get<NewsItemSearchResult>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Gets a specific news item</summary>
@@ -474,7 +474,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation.</returns>
     public Task<NewsItemDataModel> GetNewsItemAsync(string libraryCode, string productCode, string id)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/news-items/{id}";
+        var url = $"libraries/{libraryCode}/products/{productCode}/news-items/{id}";
         return this.Get<NewsItemDataModel>(url, HttpStatusCode.OK);
     }
 
@@ -482,7 +482,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation</returns>
     public Task<List<string>> GetCurrentSubscriberExportPermissionsAsync()
     {
-        var url = "/subscriber/exportable-file-extensions";
+        var url = "subscriber/exportable-file-extensions";
         return this.Get<List<string>>(url, HttpStatusCode.OK);
     }
 
@@ -490,7 +490,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation.</returns>
     public Task<List<AccountSearchResults>> GetAllAvailableAccountsAsync()
     {
-        var url = "/accounts";
+        var url = "accounts";
         return this.Get<List<AccountSearchResults>>(url, HttpStatusCode.OK);
     }
 
@@ -499,7 +499,7 @@ public partial class IReportsLibrary
     /// <returns>The emails were successfully sent</returns>
     public Task ResetPasswordsAndSendWelcomeEmailAsync(WelcomeEmailForm body)
     {
-        var url = "/accounts/registration/send-welcome-email";
+        var url = "accounts/registration/send-welcome-email";
         return this.Post(url, body, HttpStatusCode.OK);
     }
 
@@ -508,7 +508,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation.</returns>
     public Task<AccountSearchResults> GetAccountAsync(string accountName)
     {
-        var url = $"/accounts/{accountName}";
+        var url = $"accounts/{accountName}";
         return this.Get<AccountSearchResults>(url, HttpStatusCode.OK);
     }
 
@@ -518,7 +518,7 @@ public partial class IReportsLibrary
     /// <returns>The account was successfully edited.</returns>
     public Task PutAccountAsync(string accountName, AccountCreateForm body)
     {
-        var url = $"/accounts/{accountName}";
+        var url = $"accounts/{accountName}";
         return this.Put(url, body, HttpStatusCode.OK, HttpStatusCode.Created);
     }
 
@@ -527,7 +527,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation.</returns>
     public Task DeleteAccountAsync(string accountName)
     {
-        var url = $"/accounts/{accountName}";
+        var url = $"accounts/{accountName}";
         return this.Delete(url, HttpStatusCode.NoContent);
     }
 
@@ -536,7 +536,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation.</returns>
     public Task<AccountAccessSearchResults> GetRegistrationOptionsAsync(string accountName)
     {
-        var url = $"/accounts/{accountName}/registration";
+        var url = $"accounts/{accountName}/registration";
         return this.Get<AccountAccessSearchResults>(url, HttpStatusCode.OK);
     }
 
@@ -546,7 +546,7 @@ public partial class IReportsLibrary
     /// <returns>The account registration information was successfully edited.</returns>
     public Task PutRegistrationOptionsAsync(string accountName, AccountRegistrationCreateForm body)
     {
-        var url = $"/accounts/{accountName}/registration";
+        var url = $"accounts/{accountName}/registration";
         return this.Put(url, body, HttpStatusCode.OK);
     }
 
@@ -555,7 +555,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation</returns>
     public Task<SubscriberDataModel> GetSubscriberAsync(string username)
     {
-        var url = $"/subscribers/{username}";
+        var url = $"subscribers/{username}";
         return this.Get<SubscriberDataModel>(url, HttpStatusCode.OK);
     }
 
@@ -564,7 +564,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation</returns>
     public Task<SubscriberDataModel> GetSubscribersAsync(string accountName)
     {
-        var url = $"/accounts/{accountName}/subscribers";
+        var url = $"accounts/{accountName}/subscribers";
         return this.Get<SubscriberDataModel>(url, HttpStatusCode.OK);
     }
 
@@ -575,7 +575,7 @@ public partial class IReportsLibrary
     /// <returns>Subscriber was edited successfully</returns>
     public Task PutSubscriberAsync(string accountName, string username, SubscriberDataForm body)
     {
-        var url = $"/accounts/{accountName}/subscribers/{username}";
+        var url = $"accounts/{accountName}/subscribers/{username}";
         return this.Put(url, body, HttpStatusCode.OK, HttpStatusCode.Created);
     }
 
@@ -585,7 +585,7 @@ public partial class IReportsLibrary
     /// <returns>Subscriber was deleted successfully</returns>
     public Task DeleteSubscriberAsync(string accountName, string username)
     {
-        var url = $"/accounts/{accountName}/subscribers/{username}";
+        var url = $"accounts/{accountName}/subscribers/{username}";
         return this.Delete(url, HttpStatusCode.NoContent);
     }
 
@@ -595,7 +595,7 @@ public partial class IReportsLibrary
     /// <returns>License was added successfully</returns>
     public Task PostReportLicenseAsync(string accountName, CreateUserLicenseForm body)
     {
-        var url = $"/accounts/{accountName}/ReportLicenses";
+        var url = $"accounts/{accountName}/ReportLicenses";
         return this.Post(url, body, HttpStatusCode.Created);
     }
 
@@ -604,14 +604,14 @@ public partial class IReportsLibrary
     /// <param name="skip">Skip the first X licenses. Used for paging</param>
     /// <param name="take">The number of licenses to retrieve from this request. Used for paging. If the value is null (default), then up to 1000 licenses will be retrieved</param>
     /// <returns>Success</returns>
-    public Task<LicenseQueryResultModel<ReportLicenseModel>> GetReportLicensesAsync(
+    public async Task<LicenseQueryResultModel<ReportLicenseModel>> GetReportLicensesAsync(
         string accountName,
         int? skip,
         int? take)
     {
-        var query = CreateQueryString(new { skip, take });
-        var url = $"/accounts/{accountName}/ReportLicenses?{query}";
-        return this.Get<LicenseQueryResultModel<ReportLicenseModel>>(url, HttpStatusCode.OK);
+        var query = await CreateQueryString(new { skip, take });
+        var url = $"accounts/{accountName}/ReportLicenses?{query}";
+        return await this.Get<LicenseQueryResultModel<ReportLicenseModel>>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Removes a report license from all users on an account</summary>
@@ -620,7 +620,7 @@ public partial class IReportsLibrary
     /// <returns>License was successfully deleted</returns>
     public Task DeleteReportLicenseAsync(string accountName, int licenseId)
     {
-        var url = $"/accounts/{accountName}/ReportLicenses/{licenseId}";
+        var url = $"accounts/{accountName}/ReportLicenses/{licenseId}";
         return this.Delete(url, HttpStatusCode.NoContent);
     }
 
@@ -630,7 +630,7 @@ public partial class IReportsLibrary
     /// <returns>License was added successfully</returns>
     public Task PostCategoryLicenseAsync(string accountName, CreateCategoryLicenseForm body)
     {
-        var url = $"/accounts/{accountName}/category-licenses";
+        var url = $"accounts/{accountName}/category-licenses";
         return this.Post(url, body, HttpStatusCode.Created);
     }
 
@@ -639,14 +639,14 @@ public partial class IReportsLibrary
     /// <param name="skip">Skip the first X licenses. Used for paging</param>
     /// <param name="take">The number of licenses to retrieve from this request. Used for paging. If the value is null (default), then up to 1000 licenses will be retrieved</param>
     /// <returns>Success</returns>
-    public Task<LicenseQueryResultModel<CategoryLicenseModel>> GetAllCategoriesForAccountAsync(
+    public async Task<LicenseQueryResultModel<CategoryLicenseModel>> GetAllCategoriesForAccountAsync(
         string accountName,
         int? skip,
         int? take)
     {
-        var query = CreateQueryString(new { skip, take });
-        var url = $"/accounts/{accountName}/category-licenses?";
-        return this.Get<LicenseQueryResultModel<CategoryLicenseModel>>(url, HttpStatusCode.OK);
+        var query = await CreateQueryString(new { skip, take });
+        var url = $"accounts/{accountName}/category-licenses?";
+        return await this.Get<LicenseQueryResultModel<CategoryLicenseModel>>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Removes a category license from all users on an account</summary>
@@ -655,7 +655,7 @@ public partial class IReportsLibrary
     /// <returns>License was successfully deleted</returns>
     public Task DeleteCategoryLicenseAsync(string accountName, int licenseId)
     {
-        var url = $"/accounts/{accountName}/category-licenses/{licenseId}";
+        var url = $"accounts/{accountName}/category-licenses/{licenseId}";
         return this.Delete(url, HttpStatusCode.NoContent);
     }
 
@@ -665,7 +665,7 @@ public partial class IReportsLibrary
     /// <returns>License was added successfully</returns>
     public Task PostReportLicenseForUserAsync(string username, CreateUserLicenseForm body)
     {
-        var url = $"/subscribers/{username}/ReportLicenses";
+        var url = $"subscribers/{username}/ReportLicenses";
         return this.Post(url, body, HttpStatusCode.Created);
     }
 
@@ -674,21 +674,21 @@ public partial class IReportsLibrary
     /// <param name="skip">Skip the first X licenses. Used for paging</param>
     /// <param name="take">The number of licenses to retrieve from this request. Used for paging. If the value is null (default), then up to 1000 licenses will be retrieved</param>
     /// <returns>Success</returns>
-    public Task<LicenseQueryResultModel<ReportLicenseModel>> GetReportLicensesForUserAsync(
+    public async Task<LicenseQueryResultModel<ReportLicenseModel>> GetReportLicensesForUserAsync(
         string username,
         int? skip,
         int? take)
     {
-        var query = CreateQueryString(new { skip, take });
-        var url = $"/subscribers/{username}/ReportLicenses?{query}";
-        return this.Get<LicenseQueryResultModel<ReportLicenseModel>>(url, HttpStatusCode.OK);
+        var query = await CreateQueryString(new { skip, take });
+        var url = $"subscribers/{username}/ReportLicenses?{query}";
+        return await this.Get<LicenseQueryResultModel<ReportLicenseModel>>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Get the searches saved by a subscriber</summary>
     /// <param name="username">The username of the subscriber</param>
     public Task<List<SavedSearchListModel>> GetSavedSearchesAsync(string username)
     {
-        var url = $"/subscribers/{username}/saved-searches";
+        var url = $"subscribers/{username}/saved-searches";
         return this.Get<List<SavedSearchListModel>>(url, HttpStatusCode.OK);
     }
 
@@ -698,7 +698,7 @@ public partial class IReportsLibrary
     /// <returns>Saved search was added successfully. Will return default values for parameters that are not set if applicable.</returns>
     public Task<SavedSearchModel> PostSavedSearchAsync(string username, AddSavedSearchForm body)
     {
-        var url = $"/subscribers/{username}/saved-searches";
+        var url = $"subscribers/{username}/saved-searches";
         return this.Post<SavedSearchModel>(url, body, HttpStatusCode.Created);
     }
 
@@ -708,7 +708,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation</returns>
     public Task<SavedSearchModel> GetSavedSearchAsync(string username, int id)
     {
-        var url = $"/subscribers/{username}/saved-searches/{id}";
+        var url = $"subscribers/{username}/saved-searches/{id}";
         return this.Get<SavedSearchModel>(url, HttpStatusCode.OK);
     }
 
@@ -718,7 +718,7 @@ public partial class IReportsLibrary
     /// <returns>Successfully deleted saved search</returns>
     public Task DeleteSavedSearchAsync(string username, int id)
     {
-        var url = $"/subscribers/{username}/saved-searches/{id}";
+        var url = $"subscribers/{username}/saved-searches/{id}";
         return this.Delete(url, HttpStatusCode.NoContent);
     }
 
@@ -728,7 +728,7 @@ public partial class IReportsLibrary
     /// <returns>License was successfully deleted</returns>
     public Task DeleteReportLicenseForUserAsync(string username, int id)
     {
-        var url = $"/subscribers/{username}/ReportLicenses/{id}";
+        var url = $"subscribers/{username}/ReportLicenses/{id}";
         return this.Delete(url, HttpStatusCode.NoContent);
     }
 
@@ -738,7 +738,7 @@ public partial class IReportsLibrary
     /// <returns>License was added successfully</returns>
     public Task PostCategoryLicenseForUser(string username, CreateCategoryLicenseForm body)
     {
-        var url = $"/subscribers/{username}/category-licenses";
+        var url = $"subscribers/{username}/category-licenses";
         return this.Post(url, HttpStatusCode.Created);
     }
 
@@ -747,14 +747,14 @@ public partial class IReportsLibrary
     /// <param name="skip">Skip the first X licenses. Used for paging</param>
     /// <param name="take">The number of licenses to retrieve from this request. Used for paging. If the value is null (default), then up to 1000 licenses will be retrieved</param>
     /// <returns>Success</returns>
-    public Task<LicenseQueryResultModel<CategoryLicenseModel>> GetCategoryLicensesForUser(
+    public async Task<LicenseQueryResultModel<CategoryLicenseModel>> GetCategoryLicensesForUser(
         string username,
         int? skip,
         int? take)
     {
-        var query = CreateQueryString(new { skip, take });
-        var url = $"/subscribers/{username}/category-licenses?{query}";
-        return this.Get<LicenseQueryResultModel<CategoryLicenseModel>>(url, HttpStatusCode.OK);
+        var query = await CreateQueryString(new { skip, take });
+        var url = $"subscribers/{username}/category-licenses?{query}";
+        return await this.Get<LicenseQueryResultModel<CategoryLicenseModel>>(url, HttpStatusCode.OK);
     }
 
     /// <summary>Removes a category license from a specific user</summary>
@@ -763,7 +763,7 @@ public partial class IReportsLibrary
     /// <returns>License was successfully deleted</returns>
     public Task DeleteCategoryLicenseForUser(string username, int licenseId)
     {
-        var url = $"/subscribers/{username}/category-licenses/{licenseId}";
+        var url = $"subscribers/{username}/category-licenses/{licenseId}";
         return this.Delete(url, HttpStatusCode.NoContent);
     }
 
@@ -772,7 +772,7 @@ public partial class IReportsLibrary
     /// <returns>Successful operation</returns>
     public Task<LicenseModel> GetLicenseAsync(int licenseId)
     {
-        var url = $"/licenses/{licenseId}";
+        var url = $"licenses/{licenseId}";
         return this.Get<LicenseModel>(url, HttpStatusCode.OK);
     }
 
@@ -783,7 +783,7 @@ public partial class IReportsLibrary
     /// <returns>Edited successfully</returns>
     public Task PutExternalReportLinkSettingsAsync(string libraryCode, string productCode, ExternalProductLinkForm body)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/ExternalProductLink";
+        var url = $"libraries/{libraryCode}/products/{productCode}/ExternalProductLink";
         return this.Put(url, body, HttpStatusCode.OK);
     }
 
@@ -793,7 +793,7 @@ public partial class IReportsLibrary
     /// <returns>Success</returns>
     public Task<ExternalProductLinkForm> GetExternalReportLinkSettingsAsync(string libraryCode, string productCode)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/ExternalProductLink";
+        var url = $"libraries/{libraryCode}/products/{productCode}/ExternalProductLink";
         return this.Get<ExternalProductLinkForm>(url, HttpStatusCode.OK);
     }
 
@@ -804,7 +804,7 @@ public partial class IReportsLibrary
     /// <returns>Success</returns>
     public Task PostMarketingBrochureAsync(string libraryCode, string productCode, MarketingBrochureForm body)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/marketing-brochure-file";
+        var url = $"libraries/{libraryCode}/products/{productCode}/marketing-brochure-file";
         return this.Post(url, body, HttpStatusCode.OK);
     }
 
@@ -814,7 +814,7 @@ public partial class IReportsLibrary
     /// <returns>Success</returns>
     public Task<MarketingBrochureModel> GetMarketingBrochureUrlAsync(string libraryCode, string productCode)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/marketing-brochure-file";
+        var url = $"libraries/{libraryCode}/products/{productCode}/marketing-brochure-file";
         return this.Get<MarketingBrochureModel>(url, HttpStatusCode.OK);
     }
 
@@ -824,7 +824,7 @@ public partial class IReportsLibrary
     /// <returns>Success</returns>
     public Task DeleteMarketingBrochureAsync(string libraryCode, string productCode)
     {
-        var url = $"/libraries/{libraryCode}/products/{productCode}/marketing-brochure-file";
+        var url = $"libraries/{libraryCode}/products/{productCode}/marketing-brochure-file";
         return this.Delete(url, HttpStatusCode.NoContent);
     }
 
@@ -936,16 +936,17 @@ public partial class IReportsLibrary
         }
     }
 
-    private static string CreateQueryString(object parameters)
+    private static Task<string> CreateQueryString(object parameters)
     {
         var dictionary = parameters.GetType()
                                    .GetProperties()
                                    .Select(i => Tuple.Create(i.Name, i.GetValue(parameters)))
+                                   .Where(t => t.Item2 != null)
                                    .ToDictionary(t => t.Item1, t => t.Item2.ToString());
 
         using (var content = new FormUrlEncodedContent(dictionary))
         {
-            return content.ToString();
+            return content.ReadAsStringAsync();
         }
     }
 

@@ -158,7 +158,7 @@ public class ProductMetadataModel
     public string Description { get; set; }
 
     /// <summary>Price of the product</summary>
-    public int? Price { get; set; }
+    public float? Price { get; set; }
 
     /// <summary>Label of the price</summary>
     public string PriceLabel { get; set; }

@@ -18,8 +18,7 @@ namespace Examples
         public static async Task<ProductSearchResults> GetProducts(
             IReportsLibrary iReportsLibrary, int skip, int take)
         {
-            ProductSearchResults productResults =
-            await iReportsLibrary.GetProductsAsync(
+            ProductSearchResults productResults = await iReportsLibrary.GetProductsAsync(
                 null,
                 null,
                 null,

@@ -16,11 +16,11 @@ namespace IReportsApiExamples
         private static async Task MainAsync()
         {
             using (var iReportsLibrary = await MakeAuthenticatedClient.DoWork(
-                "BASE_URL", "USERNAME", "PASSWORD"))
+                "http://localhost:63352/api/v1/", "paulpopat", "paul123"))
             {
-                await ShareSavedSearch.DoWork(iReportsLibrary, "USERNAME", "SEARCH_TERMS");
+                await ShareSavedSearch.DoWork(iReportsLibrary, "paulpopat", "test");
                 await GetPageOfProductNames.GetProducts(iReportsLibrary, 0, 10);
-                await ProductContent.DoWork(iReportsLibrary);
+                await GetProductAttachmentsAndPrintCopies.DoWork(iReportsLibrary);
             }
         }
     }

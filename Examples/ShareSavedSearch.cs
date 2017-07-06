@@ -14,18 +14,24 @@ namespace IReportsApiExamples.Examples
         /// <param name="iReportsLibrary">The IReportsLibrary object to use</param>
         /// <param name="username">The username of the desired user</param>
         /// <param name="searchTerms">The desired search terms to search for in all the saved searches</param>
-        public static async Task DoWork(IReportsLibrary iReportsLibrary, string username,
-                                        string searchTerms)
+        public static async Task DoWork(
+            IReportsLibrary iReportsLibrary,
+            string username,
+            string searchTerms)
         {
-            ObservableCollection<SavedSearchListModel> savedSearchesList
-                        = await iReportsLibrary.GetSavedSearchesAsync(username);
+            List<SavedSearchListModel> savedSearchesList = await iReportsLibrary.GetSavedSearchesAsync(username);
 
-            SavedSearchModel savedSearchModel = await FindSavedSearch(iReportsLibrary, savedSearchesList, username, searchTerms);
+            SavedSearchModel savedSearchModel = await FindSavedSearch(
+                iReportsLibrary,
+                savedSearchesList,
+                username,
+                searchTerms);
 
             if (savedSearchModel == null)
             {
                 await iReportsLibrary.PostSavedSearchAsync(
-                    username, CreateNewSavedSearchWithSpecifiedSearchTerms(searchTerms));
+                    username,
+                    CreateNewSavedSearchWithSpecifiedSearchTerms(searchTerms));
 
                 Console.WriteLine(
                     $@"Created new Saved Search with a title of '{searchTerms}'
@@ -49,8 +55,10 @@ namespace IReportsApiExamples.Examples
         /// <param name="username">The username of the user</param>        
         /// <param name="specifiedSearchTerms">The search terms to look for in the saved searches</param>
         private static async Task<SavedSearchModel> FindSavedSearch(
-            IReportsLibrary iReportsLibrary, ObservableCollection<SavedSearchListModel> savedSearchesList,
-                                             string username, string specifiedSearchTerms)
+            IReportsLibrary iReportsLibrary,
+            List<SavedSearchListModel> savedSearchesList,
+            string username,
+            string specifiedSearchTerms)
         {
             foreach (var model in savedSearchesList)
             {
@@ -73,7 +81,9 @@ namespace IReportsApiExamples.Examples
         /// <param name="username">The username of the user</param>        
         /// <param name="oldSavedSearch">The old saved search to delete and retrieve the data from</param>
         private static async void PutSavedSearch(
-            IReportsLibrary iReportsLibrary, string username, SavedSearchModel oldSavedSearch)
+            IReportsLibrary iReportsLibrary,
+            string username,
+            SavedSearchModel oldSavedSearch)
         {
             await iReportsLibrary.DeleteSavedSearchAsync(username, oldSavedSearch.Id);
             await iReportsLibrary.PostSavedSearchAsync(username, CreateNewSavedSearch(oldSavedSearch));
@@ -83,20 +93,20 @@ namespace IReportsApiExamples.Examples
         /// <param name="oldSavedSearch">The saved search to copy the data from</param>
         private static AddSavedSearchForm CreateNewSavedSearch(SavedSearchModel oldSavedSearch)
         {
-            AddSavedSearchFormAlertFrequency alertFrequency = AddSavedSearchFormAlertFrequency.Never;
+            AlertFrequency alertFrequency = AlertFrequency.Never;
 
             switch (oldSavedSearch.AlertFrequency)
             {
-                case SavedSearchModelAlertFrequency.Never:
-                    alertFrequency = AddSavedSearchFormAlertFrequency.Never;
+                case AlertFrequency.Never:
+                    alertFrequency = AlertFrequency.Never;
                     break;
 
-                case SavedSearchModelAlertFrequency.Daily:
-                    alertFrequency = AddSavedSearchFormAlertFrequency.Daily;
+                case AlertFrequency.Daily:
+                    alertFrequency = AlertFrequency.Daily;
                     break;
 
-                case SavedSearchModelAlertFrequency.Weekly:
-                    alertFrequency = AddSavedSearchFormAlertFrequency.Weekly;
+                case AlertFrequency.Weekly:
+                    alertFrequency = AlertFrequency.Weekly;
                     break;
             }
 
