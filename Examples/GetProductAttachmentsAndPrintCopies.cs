@@ -6,24 +6,24 @@ namespace IReportsApiExamples.Examples
 {
     public class GetProductAttachmentsAndPrintCopies
     {
-        public static async Task DoWork(IReportsLibrary iReportsLibrary)
+        public static async Task DoWork(ApiWrapper wrapper, string productCode)
         {
-            var toc = await iReportsLibrary.GetProductByCodeAsync(
+            var toc = await wrapper.GetProductByCodeAsync(
                 "reports",
-                "CNFDDiet05",
+                productCode,
                 false,
                 true);
             foreach (var attachment in toc.Attachments)
             {
-                var fileModel = await iReportsLibrary.GetAttachmentAsync("reports", "CNFDDiet05", attachment.FileCode);
+                var fileModel = await wrapper.GetAttachmentAsync("reports", productCode, attachment.FileCode);
                 File.WriteAllBytes(fileModel.Name, fileModel.Content);
             }
 
             foreach (var attachment in toc.PrintCopies)
             {
-                var fileModel = await iReportsLibrary.GetPrintCopyAsync(
+                var fileModel = await wrapper.GetPrintCopyAsync(
                     "reports",
-                    "CNFDDiet05",
+                    productCode,
                     attachment.Extension,
                     attachment.FileCode);
                 File.WriteAllBytes(fileModel.Name, fileModel.Content);

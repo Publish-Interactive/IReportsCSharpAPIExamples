@@ -17,12 +17,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-public partial class IReportsLibrary
+public partial class ApiWrapper
     : IDisposable
 {
     private HttpClient httpClient;
 
-    public IReportsLibrary(string baseUrl, HttpClient httpClient)
+    public ApiWrapper(string baseUrl, HttpClient httpClient)
     {
         this.httpClient = httpClient;
         this.httpClient.BaseAddress = new Uri(baseUrl);
