@@ -18,6 +18,11 @@ namespace IReportsApiExamples
             using (var wrapper = await MakeAuthenticatedClient.DoWork(
                 "BASE_URL/api/v1/", "USERNAME", "PASSWORD"))
             {
+                ImportAccountsAndSubscribers.DoWork(
+                    wrapper,
+                    "ACCOUNTS_FILE_PATH",
+                    "SUBSCRIBERS_FILE_PATH");
+
                 await MoveUserToAnotherAccount.DoWork(wrapper,
                     "USERNAME",
                     "NEW_ACCOUNT_NAME",
