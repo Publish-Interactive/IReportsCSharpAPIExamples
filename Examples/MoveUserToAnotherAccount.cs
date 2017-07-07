@@ -16,21 +16,24 @@ namespace IReportsApiExamples.Examples
         /// <param name="companyName">The company name of the new account</param>
         /// <param name="countryCode">The country code of the new account</param>
         /// <param name="email">The email address of the new user</param>
-        public static async Task DoWork(ApiWrapper wrapper,
+        public static async Task DoWork(
+            ApiWrapper wrapper,
             string username,
             string newAccountName,
             string companyName,
             string countryCode,
             string email)
         {
-            SubscriberDataModel subscriberModel = await GetSubscriber(wrapper,
+            SubscriberDataModel subscriberModel = await GetOrCreateSubscriber(
+                wrapper,
                 username,
-                email,
+                newAccountName,
                 companyName,
                 countryCode,
-                newAccountName);
+                email);
 
-            await wrapper.PutSubscriberAsync(subscriberModel.AccountName,
+            await wrapper.PutSubscriberAsync(
+                subscriberModel.AccountName,
                 username,
                 CreateSubscriberDataForm(subscriberModel, newAccountName));
 
@@ -48,44 +51,68 @@ namespace IReportsApiExamples.Examples
         /// <param name="companyName">The company name of the new account</param>
         /// <param name="countryCode">The country code of the new account</param>
         /// <param name="email">The email address of the new user</param>
-        private static async Task<SubscriberDataModel> GetSubscriber(ApiWrapper wrapper,
+        private static async Task<SubscriberDataModel> GetOrCreateSubscriber(
+            ApiWrapper wrapper,
             string username,
             string newAccountName,
             string companyName,
             string countryCode,
             string email)
         {
+            bool accountExists = false;
+            bool subscriberExists = false;
+            SubscriberDataModel subscriberModel = null;
+
             foreach (AccountSearchResults accountResult in await wrapper.GetAllAvailableAccountsAsync())
             {
+                if (accountResult.Name == newAccountName)
+                {
+                    accountExists = true;
+                    Console.WriteLine("Account exists");
+                }
+
                 foreach (SubscriberDataModel subscriber in await wrapper.GetSubscribersAsync(accountResult.Name))
                 {
                     if (subscriber.Username == username)
                     {
+                        subscriberExists = true;
+                        subscriberModel = subscriber;
                         Console.WriteLine($"User '{username}' exists");
-                        return subscriber;
+                        break;
                     }
                 }
             }
 
-            await CreateAccount(wrapper, companyName, countryCode, newAccountName);
-
-            Console.WriteLine($"User '{username}' does not exist so created new account called '{newAccountName}'");
-
-            return new SubscriberDataModel
+            //if the desired account doesn't exist, it creates a new account
+            if (!accountExists)
             {
-                Email = email,
-                AccountName = newAccountName,
-                IsEnabled = true
-            };
+                await CreateAccount(wrapper, newAccountName, companyName, countryCode);
+                Console.WriteLine($"Account does not exist so created a new one called {newAccountName}");
+            }
+
+            //if the subscriber doesnt exist, it creates a new SubscriberDataModel
+            if (!subscriberExists)
+            {
+                subscriberModel = new SubscriberDataModel
+                {
+                    Email = email,
+                    AccountName = newAccountName,
+                    IsEnabled = true
+                };
+
+                Console.WriteLine($"User '{username}' does not exist");
+            }
+
+            return subscriberModel;
         }
 
         /// <summary>Creates a new account with the desired company name and country code</summary>
-
         /// <param name="wrapper">The ApiWrapper object to use</param>
         /// <param name="newAccountName">The name of the account to move the user across to, or create</param>
         /// <param name="companyName">The company name of the new account</param>
         /// <param name="countryCode">The country code of the new account</param>
-        private static async Task CreateAccount(ApiWrapper wrapper,
+        private static async Task CreateAccount(
+            ApiWrapper wrapper,
             string newAccountName,
             string companyName,
             string countryCode)
@@ -104,7 +131,8 @@ namespace IReportsApiExamples.Examples
 
         /// <param name="subscriberModel">The SubscriberDataModel of the desired user to copy the values from</param>
         /// <param name="newAccountName">The account name of the account the desired user should be moved to</param>
-        private static SubscriberDataForm CreateSubscriberDataForm(SubscriberDataModel subscriberModel,
+        private static SubscriberDataForm CreateSubscriberDataForm(
+            SubscriberDataModel subscriberModel,
             string newAccountName)
         {
             return new SubscriberDataForm
