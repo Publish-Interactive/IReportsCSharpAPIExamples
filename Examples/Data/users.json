@@ -1,38 +1,38 @@
 [
-		{
-			"username": "user2",
-			"name": "test two",
-			"email": "email@email.com",
-			"accountName": "account3",
-			"languageCode": "en"
-		},
-		{
-			"username": "user3",
-			"name": "User With No Rights",
-			"email": "email@email.com",
-			"department": "User",
-			"accountName": "account2",
-			"languageCode": "en"
-		},
-		{
-			"username": "user4",
-			"name": "test3",
-			"email": "email@email.com",
-			"accountName": "account1",
-			"languageCode": "en"
-		},
-		{
-			"username": "user5",
-			"name": "test 4",
-			"email": "email@email.com",
-			"accountName": "account1",
-			"languageCode": "en"
-		},
-		{
-			"username": "user6",
-			"name": "user 6",
-			"email": "email@email.com",
-			"accountName": "account3",
-			"languageCode": "en"
-		}
-	]
+	{
+		"username": "user2",
+		"name": "test two",
+		"email": "email@email.com",
+		"accountName": "account3",
+		"languageCode": "en"
+	},
+	{
+		"username": "user3",
+		"name": "User With No Rights",
+		"email": "email@email.com",
+		"department": "User",
+		"accountName": "account2",
+		"languageCode": "en"
+	},
+	{
+		"username": "user4",
+		"name": "test3",
+		"email": "email@email.com",
+		"accountName": "account1",
+		"languageCode": "en"
+	},
+	{
+		"username": "user5",
+		"name": "test 4",
+		"email": "email@email.com",
+		"accountName": "account1",
+		"languageCode": "en"
+	},
+	{
+		"username": "user6",
+		"name": "user 6",
+		"email": "email@email.com",
+		"accountName": "account3",
+		"languageCode": "en"
+	}
+]
