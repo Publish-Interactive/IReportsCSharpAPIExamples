@@ -17,8 +17,8 @@ namespace IReportsApiExamples.Examples
             string accountsFilePath,
             string subscribersFilePath)
         {
-            var accountList = getListFromJson<AccountSearchResults>(accountsFilePath);
-            var subscriberList = getListFromJson<SubscriberDataModel>(subscribersFilePath);
+            var accountList = GetListFromJson<AccountSearchResults>(accountsFilePath);
+            var subscriberList = GetListFromJson<SubscriberDataModel>(subscribersFilePath);
 
             foreach (var account in accountList)
             {
@@ -36,15 +36,9 @@ namespace IReportsApiExamples.Examples
 
         /// <summary>Deserializes the desired Json file into a list with a specified type</summary>
         /// <param name="filePath">The path to the Json file to be deserialized</param>
-        private static List<T> getListFromJson<T>(string filePath)
+        private static List<T> GetListFromJson<T>(string filePath)
         {
-            using (var streamReader = File.OpenText(filePath))
-            {
-                var jsonTextReader = new JsonTextReader(streamReader);
-                var jsonSerializer = new JsonSerializer();
-
-                return jsonSerializer.Deserialize<List<T>>(jsonTextReader);
-            }
+            return JsonConvert.DeserializeObject<List<T>>(File.ReadAllText(filePath));
         }
 
         /// <summary>Converts a AccountSearchResults into an AccountCreateForm 
