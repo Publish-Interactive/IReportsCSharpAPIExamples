@@ -1,0 +1,27 @@
+[
+	{
+		"name": "account1",
+		"companyName": "Company1",
+		"countryCode": "ZW",
+		"isEnabled": true
+	},
+	{
+		"name": "account2",
+		"companyName": "Company2",
+		"countryCode": "GB",
+		"isEnabled": true
+	},
+	{
+		"name": "account3",
+		"companyName": "Company3",
+		"countryCode": "ZW",
+		"isEnabled": true
+	},
+	{
+		"username": "user1",
+		"name": "test one",
+		"email": "email@email.com",
+		"accountName": "account1",
+		"languageCode": "en"
+	}
+]
