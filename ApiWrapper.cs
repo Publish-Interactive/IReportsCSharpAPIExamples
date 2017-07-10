@@ -205,7 +205,7 @@ public partial class ApiWrapper
         ProductMetadataForm body)
     {
         var url = $"libraries/{libraryCode}/products/{productCode}";
-        return this.Put<ProductMetadataModel>(url, body, HttpStatusCode.Created);
+        return this.Put<ProductMetadataModel>(url, body, HttpStatusCode.Created, HttpStatusCode.NoContent);
     }
 
     /// <summary>Delete a product, if it exists</summary>
