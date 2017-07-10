@@ -323,7 +323,7 @@ public partial class ApiWrapper
     public Task PutProductCategoriesAsync(string libraryCode, string productCode, List<string> body)
     {
         var url = $"libraries/{libraryCode}/products/{productCode}/categories";
-        return this.Put(url, body, HttpStatusCode.OK);
+        return this.Put(url, body, HttpStatusCode.NoContent);
     }
 
     /// <summary>Gets the top level categories, optionally including children</summary>
