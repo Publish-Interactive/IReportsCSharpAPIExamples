@@ -1,0 +1,45 @@
+[
+    {
+        "id": "Category1",
+        "code": "01-Category",
+        "name": "Category 1",
+        "isHidden": true,
+        "children": [
+            {
+                "id": "Child",
+                "code": "01-Category-Child",
+                "parentId": "Category1",
+                "name": "Category 1 Child",
+                "isHidden": true,
+                "children": [
+                    {
+                        "id": "Child",
+                        "parentId": "Category1-Category1Child",
+                        "name": "Childchild",
+                        "isHidden": true,
+                        "code": "childchid"
+                    }
+                ]
+            },
+            {
+                "id": "Child2",
+                "parentId": "Category1",
+                "name": "Category 1 Child 2",
+                "isHidden": true,
+                "code": "01-Category-Child2"
+            }
+        ]
+    },
+    {
+        "id": "Category2",
+        "code": "02-Category",
+        "name": "Category 2",
+        "isHidden": true
+    },
+    {
+        "id": "Category3",
+        "code": "03-Category",
+        "name": "Category 3",
+        "isHidden": true
+    }
+]
