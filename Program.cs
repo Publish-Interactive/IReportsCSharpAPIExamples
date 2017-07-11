@@ -1,8 +1,8 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Examples;
 using IReportsApiExamples.Examples;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace IReportsApiExamples
 {
@@ -10,6 +10,7 @@ namespace IReportsApiExamples
     {
         static void Main(string[] args)
         {
+            SerializeEnumsToStringByDefault();
             MainAsync().Wait();
         }
 
@@ -18,6 +19,13 @@ namespace IReportsApiExamples
             using (var wrapper = await MakeAuthenticatedClient.DoWork(
                 "BASE_URL/api/v1/", "USERNAME", "PASSWORD"))
             {
+                await ImportCategoriesAndProducts.DoWork(
+                   wrapper,
+                   "CATEGORIES_FILE_PATH",
+                   "PRODUCTS_FILE_PATH",
+                   "LIBRARY_CODE"
+               );
+
                 ImportAccountsAndSubscribers.DoWork(
                     wrapper,
                     "ACCOUNTS_FILE_PATH",
@@ -35,6 +43,17 @@ namespace IReportsApiExamples
                 await GetProductAttachmentsAndPrintCopies.DoWork(wrapper, "PRODUCT_CODE");
 
             }
+        }
+
+        ///<summary>Automatically serialize Enums as strings by changing the global setting for Json.net<summary>
+        private static void SerializeEnumsToStringByDefault()
+        {
+            JsonConvert.DefaultSettings = () =>
+                        {
+                            var settings = new JsonSerializerSettings();
+                            settings.Converters.Add(new StringEnumConverter());
+                            return settings;
+                        };
         }
     }
 }
