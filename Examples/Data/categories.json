@@ -6,27 +6,30 @@
         "isHidden": true,
         "children": [
             {
-                "id": "Child",
-                "code": "01-Category-Child",
-                "parentId": "Category1",
-                "name": "Category 1 Child",
+                "id": "bla1",
+                "code": "bla1",
+                "name": "bla1",
                 "isHidden": true,
                 "children": [
                     {
-                        "id": "Child",
-                        "parentId": "Category1-Category1Child",
-                        "name": "Childchild",
+                        "id": "ChildOfChild",
+                        "name": "Child Of Child",
                         "isHidden": true,
-                        "code": "childchid"
+                        "code": "childofchild1"
+                    },
+                    {
+                        "id": "ChildOfChild2",
+                        "name": "Child Of Child 2",
+                        "isHidden": true,
+                        "code": "childofchild2"
                     }
                 ]
             },
             {
-                "id": "Child2",
-                "parentId": "Category1",
-                "name": "Category 1 Child 2",
+                "id": "bla2",
+                "name": "bla2",
                 "isHidden": true,
-                "code": "01-Category-Child2"
+                "code": "bla2"
             }
         ]
     },

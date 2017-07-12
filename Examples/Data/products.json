@@ -14,7 +14,7 @@
         },
         "authors": [],
         "categories": [
-            "Category1-Category1Child",
+            "ChildOfChild2",
             "Category2"
         ],
         "buyItNowLink": {
@@ -45,7 +45,7 @@
         },
         "authors": [],
         "categories": [
-            "Category1-Category1Child-Childchild",
+            "ChildOfChild",
             "Category3"
         ],
         "buyItNowLink": {
@@ -75,7 +75,7 @@
         },
         "authors": [],
         "categories": [
-            "Category1-Category1Child-Childchild",
+            "ChildOfChild2",
             "Category3"
         ],
         "links": [],

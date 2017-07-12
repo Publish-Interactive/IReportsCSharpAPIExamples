@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -22,18 +24,20 @@ namespace IReportsApiExamples.Examples
             var categoryList = GetListFromJson<CategoryModel>(categoriesFilePath);
             var productList = GetListFromJson<ProductMetadataModel>(productsFilePath);
 
-            await UploadCategories(wrapper, categoryList);
-            await UploadProducts(wrapper, productList, libraryCode);
+            await PostCategories(wrapper, categoryList);
+            await PutProducts(wrapper, productList, FlattenCategoriesAndSetParentId(GetListFromJson<CategoryModel>(categoriesFilePath)).ToList(), libraryCode);
         }
 
-        /// <summary>Uploads the products first. Then uploads the extended metadata, authors and the list
-        /// of categories the product is in, if it the product model includes them</summary>
+        /// <summary>Put the products first. Then put the extended metadata, authors and the list
+        /// of categories the product is in, if the product model includes them</summary>
 
         /// <param name="wrapper">The ApiWrapper object to use</param>
         /// <param name="productList">The list of deserialized products from the Json file</param>
         /// <param name="libraryCode">The code of the desired library to put the products in</param>
-        private static async Task UploadProducts(ApiWrapper wrapper,
+        private static async Task PutProducts(
+            ApiWrapper wrapper,
             List<ProductMetadataModel> productList,
+            List<CategoryModel> categoryList,
             string libraryCode)
         {
             foreach (var product in productList)
@@ -64,46 +68,64 @@ namespace IReportsApiExamples.Examples
                     await wrapper.PutProductCategoriesAsync(
                         libraryCode,
                         product.ProductCode,
-                        product.Categories
+                        GenerateProductCategoryIds(product.Categories, categoryList).ToList()
                     );
                 }
 
                 Console.WriteLine($"Created product {product.Title}");
-
-                /** 
-                How do you upload attachments?
-                    if (product.Attachments.Count > 0)
-                    {
-                        Upload attachments
-                        wrapper.PostImportAsync("reports", product.ProductCode, new ProductImportDataModel{});
-                    }
-                */
             }
         }
 
-        /// <summary>Uploads the categories and checks whether they already exist</summary>
+        /// <summary>Joins the parentId of each category in the list of product categories because on the server,
+        /// the categoryIds are joined with their parentIds<summary>
+
+        /// <param name="productCategories">The list of categories to concatinate with their parentIds<param>
+        /// <param name="categoryList">The list of CategoryModels to search through to find the parentIds 
+        /// of the product categories<param>
+        private static IEnumerable<string> GenerateProductCategoryIds(
+            List<string> productCategories,
+            List<CategoryModel> categoryList)
+        {
+            foreach (var productCategoryId in productCategories)
+            {
+                var parentId = categoryList.Where(c => c.Id == productCategoryId).Single().ParentId;
+
+                if (parentId != null)
+                {
+                    yield return string.Join("-", parentId, productCategoryId);
+                }
+                else
+                {
+                    yield return productCategoryId;
+
+                }
+            }
+        }
+
+        /// <summary>Posts the categories and checks whether they already exist</summary>
         /// <param name="wrapper">The ApiWrapper object to use</param>
         /// <param name="categoryList">The list of deserialized categories from the Json file</param>
-        private static async Task UploadCategories(ApiWrapper wrapper, List<CategoryModel> categoryList)
+        private static async Task PostCategories(ApiWrapper wrapper, List<CategoryModel> categoryList)
         {
-            var categoryCodes = await GetCategoryCodes(wrapper);
+            var categoryIds = await GetCategoryIds(wrapper);
 
-            for (int i = 0; i < categoryList.Count; i++)
+            foreach (var category in FlattenCategoriesAndSetParentId(categoryList).Reverse())
             {
-                var category = categoryList[i];
+                var oldId = category.Id;
 
-                if (category.Children != null)
+                if (category.ParentId != null)
                 {
-                    categoryList.AddRange(category.Children);
+                    category.Id = $"{category.ParentId}-{category.Id}";
                 }
 
-                if (categoryCodes.Contains(category.Code))
+                if (categoryIds.Contains(category.Id))
                 {
                     Console.WriteLine($"Category '{category.Name}' already exists");
                     continue;
                 }
                 else
                 {
+                    category.Id = oldId;
                     await wrapper.PostCategoryAsync(CreateCategoryDataForm(category));
                     Console.WriteLine($"Created Category '{category.Name}'");
                 }
@@ -112,28 +134,60 @@ namespace IReportsApiExamples.Examples
 
         /// <summary>Gets the codes of all the categories that already exist on the server</summary>
         /// <param name="wrapper">The ApiWrapper object to use</param>
-        private static async Task<List<string>> GetCategoryCodes(ApiWrapper wrapper)
+        private static async Task<List<string>> GetCategoryIds(ApiWrapper wrapper)
         {
-            var categoryCodes = new List<string>();
             var categoryList = await wrapper.GetCategoriesAsync(true, true);
 
-            for (int i = 0; i < categoryList.Count; i++)
-            {
-                var category = categoryList[i];
+            return FlattenCategories(categoryList).Select(c => c.Id).ToList();
+        }
 
+        /// <summary>Traverses through the category tree and flattens it so all the items are in one list</summary>
+        /// <param name="categoryList">The list of categories to flatten</param>
+        /// <param name="id">(ignore unless recursing) The Id of the parent category, used to generate the parentId
+        /// of each category in the list</param>
+        private static IEnumerable<CategoryModel> FlattenCategoriesAndSetParentId(
+            List<CategoryModel> categoryList,
+            string id = null)
+        {
+            foreach (var category in categoryList)
+            {
+                if (id != null)
+                {
+                    category.ParentId = id.TrimEnd('-');
+                }
+                var newId = id + category.Id + "-";
                 if (category.Children != null)
                 {
-                    categoryList.AddRange(category.Children);
+                    foreach (var childCategory in FlattenCategoriesAndSetParentId(category.Children, newId))
+                    {
+                        yield return childCategory;
+                    }
                 }
 
-                categoryCodes.Add(category.Code);
+                yield return category;
             }
+        }
 
-            return categoryCodes;
+        /// <summary>Traverses through the category tree and flattens it so all the items are in one list</summary>
+        /// <param name="categoryList">The list of categories to flatten</param>
+        private static IEnumerable<CategoryModel> FlattenCategories(List<CategoryModel> categoryList)
+        {
+            foreach (var category in categoryList)
+            {
+                if (category.Children != null)
+                {
+                    foreach (var childCategory in FlattenCategories(category.Children))
+                    {
+                        yield return childCategory;
+                    }
+                }
+
+                yield return category;
+            }
         }
 
         /// <summary>Mirrors the data in the ExtendedMetadataModel to the ExtendedMetadataForm so the Form can be
-        /// uploaded to the server</summary>
+        /// put on the server</summary>
 
         /// <param name="extendedMetadataModel">The ProductExtendedMetadataModel to convert to a Form</param>
         private static ProductExtendedMetadataForm CreateProductExtendedMetadataForm(
@@ -153,7 +207,7 @@ namespace IReportsApiExamples.Examples
         }
 
         /// <summary>Mirrors the data in the MetadataModel to the MetadataForm so the Form can be
-        /// uploaded to the server</summary>
+        /// put on the server</summary>
 
         /// <param name="metadataModel">The ProductMetadataModel to convert to a Form</param>
         private static ProductMetadataForm CreateProductMetadataForm(ProductMetadataModel metadataModel)
@@ -198,7 +252,6 @@ namespace IReportsApiExamples.Examples
         {
             return (ProductType)Enum.Parse(typeof(ProductType), typeString);
         }
-        
         /// <summary>Deserializes the desired Json file into a list with a specified type</summary>
         /// <param name="filePath">The path to the Json file to be deserialized</param>
         private static List<T> GetListFromJson<T>(string filePath)

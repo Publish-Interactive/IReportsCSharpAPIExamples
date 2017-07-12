@@ -19,8 +19,8 @@ namespace IReportsApiExamples
             using (var wrapper = await MakeAuthenticatedClient.DoWork(
                 "BASE_URL/api/v1/", "USERNAME", "PASSWORD"))
             {
-                await ImportCategoriesAndProducts.DoWork(
-                   wrapper,
+                await ImportCategoriesAndProducts.DoWork(                   
+                    wrapper,
                    "CATEGORIES_FILE_PATH",
                    "PRODUCTS_FILE_PATH",
                    "LIBRARY_CODE"
