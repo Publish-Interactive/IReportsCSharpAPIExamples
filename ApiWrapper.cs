@@ -205,7 +205,7 @@ public partial class ApiWrapper
         ProductMetadataForm body)
     {
         var url = $"libraries/{libraryCode}/products/{productCode}";
-        return this.Put<ProductMetadataModel>(url, body, HttpStatusCode.Created);
+        return this.Put<ProductMetadataModel>(url, body, HttpStatusCode.Created, HttpStatusCode.NoContent);
     }
 
     /// <summary>Delete a product, if it exists</summary>
@@ -323,7 +323,7 @@ public partial class ApiWrapper
     public Task PutProductCategoriesAsync(string libraryCode, string productCode, List<string> body)
     {
         var url = $"libraries/{libraryCode}/products/{productCode}/categories";
-        return this.Put(url, body, HttpStatusCode.OK);
+        return this.Put(url, body, HttpStatusCode.NoContent);
     }
 
     /// <summary>Gets the top level categories, optionally including children</summary>

@@ -1,0 +1,104 @@
+[
+    {
+        "productCode": "Product1",
+        "extendedMetadata": {
+            "lastUpdatedBy": "user1",
+            "contentImportedOn": "2017-04-06T15:43:00Z",
+            "contentUpdatedOn": "2017-07-07T08:44:02.967Z",
+            "marketingTocLink": "",
+            "languageCode": "en",
+            "metaKeywords": [],
+            "pageCount": 12,
+            "extraTextfield": "Extra Text Field",
+            "thirdPartyMetadata": {}
+        },
+        "authors": [],
+        "categories": [
+            "ChildOfChild2",
+            "Category2"
+        ],
+        "buyItNowLink": {
+            "isEnabled": true
+        },
+        "links": [],
+        "title": "Product 1 Title",
+        "subtitle": "Subtitle",
+        "description": "Product 1 Description",
+        "priceLabel": "Price",
+        "price": 0.10,
+        "marketingDescription": "Marketing Description",
+        "type": "PDF"
+    },
+    {
+        "productCode": "Product2",
+        "price": 0.10,
+        "extendedMetadata": {
+            "lastUpdatedBy": "user1",
+            "contentImportedOn": "2017-04-06T15:43:00Z",
+            "contentUpdatedOn": "2017-07-07T08:44:02.967Z",
+            "marketingTocLink": "",
+            "languageCode": "en",
+            "metaKeywords": [],
+            "pageCount": 12,
+            "extraTextfield": "Extra Text Field",
+            "thirdPartyMetadata": {}
+        },
+        "authors": [],
+        "categories": [
+            "ChildOfChild",
+            "Category3"
+        ],
+        "buyItNowLink": {
+            "isEnabled": true
+        },
+        "links": [],
+        "title": "Product 2 Title",
+        "subtitle": "Subtitle",
+        "description": "Product 2 Description",
+        "priceLabel": "Price",
+        "marketingDescription": "Marketing Description",
+        "type": "Normal"
+    },
+    {
+        "productCode": "Product3",
+        "price": 0.10,
+        "extendedMetadata": {
+            "lastUpdatedBy": "user3",
+            "contentImportedOn": "2017-04-06T15:43:00Z",
+            "contentUpdatedOn": "2017-07-07T08:44:02.967Z",
+            "marketingTocLink": "",
+            "languageCode": "en",
+            "metaKeywords": [],
+            "pageCount": 12,
+            "extraTextfield": "Extra Text Field",
+            "thirdPartyMetadata": {}
+        },
+        "authors": [],
+        "categories": [
+            "ChildOfChild2",
+            "Category3"
+        ],
+        "links": [],
+        "title": "Product 3 Title",
+        "subtitle": "Subtitle",
+        "description": "Product 3 Description",
+        "priceLabel": "Price",
+        "marketingDescription": "Marketing Description",
+        "type": "Normal"
+    },
+    {
+        "productCode": "Product4",
+        "authors": [],
+        "price": 0.10,
+        "categories": [
+            "Category2"
+        ],
+        "links": [],
+        "title": "Product 4 Title",
+        "subtitle": "Subtitle",
+        "description": "Product 4 Description",
+        "priceLabel": "Price",
+        "marketingDescription": "Marketing Description",
+        "type": "Normal"
+    }
+]
