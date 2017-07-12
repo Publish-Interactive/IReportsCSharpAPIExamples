@@ -97,7 +97,6 @@ namespace IReportsApiExamples.Examples
                 else
                 {
                     yield return productCategoryId;
-
                 }
             }
         }
