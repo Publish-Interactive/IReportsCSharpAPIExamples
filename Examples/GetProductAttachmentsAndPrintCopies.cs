@@ -13,6 +13,7 @@ namespace IReportsApiExamples.Examples
                 productCode,
                 false,
                 true);
+                
             foreach (var attachment in toc.Attachments)
             {
                 var fileModel = await wrapper.GetAttachmentAsync("reports", productCode, attachment.FileCode);
@@ -29,6 +30,5 @@ namespace IReportsApiExamples.Examples
                 File.WriteAllBytes(fileModel.Name, fileModel.Content);
             }
         }
-
     }
 }
