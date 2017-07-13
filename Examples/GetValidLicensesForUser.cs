@@ -17,8 +17,8 @@ namespace IReportsApiExamples.Examples
         public static async Task DoWork(
             ApiWrapper wrapper,
             string username,
-            System.DateTime startDate,
-            System.DateTime endDate)
+            DateTime startDate,
+            DateTime endDate)
         {
             var categoryLicensesQuery = await wrapper.GetCategoryLicensesForUser(username, 0, null);
             var reportsLicensesQuery = await wrapper.GetReportLicensesForUserAsync(username, 0, null);
