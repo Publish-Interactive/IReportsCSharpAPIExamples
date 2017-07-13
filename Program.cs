@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Examples;
 using IReportsApiExamples.Examples;
 using Newtonsoft.Json;

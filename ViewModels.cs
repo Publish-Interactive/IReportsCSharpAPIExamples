@@ -813,16 +813,7 @@ public class LicenseModel
 {
     public int? Id { get; set; }
 
-    /// <summary>The category id (uses '-' to separate category and subcategory names e.g. category-subcategory).</summary>
-    public string Category { get; set; }
-
-    /// <summary>The report code the license is for.</summary>
-    public string Report { get; set; }
-
     public LicenseDateRangeForm ActiveDates { get; set; }
-
-    /// <summary>If set, the user will only gain access to reports with publication dates within this range.</summary>
-    public LicenseDateRangeForm PublicationDates { get; set; }
 
     /// <summary>The number of days after a reports publication date that the user will gain access.</summary>
     public int? PublicationEmbargo { get; set; }
@@ -850,9 +841,20 @@ public class LicenseQueryResultModel<T>
     public int TotalCount { get; set; }
 }
 
-public class ReportLicenseModel : LicenseModel{}
+public class ReportLicenseModel : LicenseModel
+{
+    /// <summary>The report code the license is for.</summary>
+    public string Report { get; set; }
+}
 
-public class CategoryLicenseModel : LicenseModel{}
+public class CategoryLicenseModel : LicenseModel
+{
+    /// <summary>If set, the user will only gain access to reports with publication dates within this range.</summary>
+    public LicenseDateRangeForm PublicationDates { get; set; }
+    
+    /// <summary>The category id (uses '-' to separate category and subcategory names e.g. category-subcategory).</summary>
+    public string Category { get; set; }
+}
 
 /// <summary>The direction to sort news items by published date, and then id.</summary>
 public enum SortDirection
