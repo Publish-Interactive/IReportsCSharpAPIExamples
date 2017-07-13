@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Examples;
 using IReportsApiExamples.Examples;
 using Newtonsoft.Json;
@@ -19,11 +20,18 @@ namespace IReportsApiExamples
             using (var wrapper = await MakeAuthenticatedClient.DoWork(
                 "BASE_URL/api/v1/", "USERNAME", "PASSWORD"))
             {
-                await ImportCategoriesAndProducts.DoWork(                   
+                await GetValidLicensesForUser.DoWork(
                     wrapper,
-                   "CATEGORIES_FILE_PATH",
-                   "PRODUCTS_FILE_PATH",
-                   "LIBRARY_CODE"
+                    "USERNAME",
+                    new System.DateTime(2017, 07, 13),
+                    new System.DateTime(2017, 07, 13)
+                );
+
+                await ImportCategoriesAndProducts.DoWork(
+                    wrapper,
+                    "CATEGORIES_FILE_PATH",
+                    "PRODUCTS_FILE_PATH",
+                    "LIBRARY_CODE"
                );
 
                 ImportAccountsAndSubscribers.DoWork(

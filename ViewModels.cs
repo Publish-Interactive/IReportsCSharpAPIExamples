@@ -850,43 +850,9 @@ public class LicenseQueryResultModel<T>
     public int TotalCount { get; set; }
 }
 
-public class ReportLicenseModel
-{
-    public int Id { get; set; }
+public class ReportLicenseModel : LicenseModel{}
 
-    public string Report { get; set; }
-
-    public LicenseDateRangeForm ActiveDates { get; set; }
-
-    public string AllowedAttachments { get; set; }
-
-    public NewsSubscriptions? NewsSubscriptions { get; set; }
-
-    public string Username { get; set; }
-
-    public string AccountName { get; set; }
-}
-
-public class CategoryLicenseModel
-{
-    public int Id { get; set; }
-
-    public string Category { get; set; }
-
-    public LicenseDateRangeForm ActiveDates { get; set; }
-
-    public LicenseDateRangeForm PublicationDates { get; set; }
-
-    public int? PublicationEmbargo { get; set; }
-
-    public string AllowedAttachments { get; set; }
-
-    public NewsSubscriptions? NewsSubscriptions { get; set; }
-
-    public string Username { get; set; }
-
-    public string AccountName { get; set; }
-}
+public class CategoryLicenseModel : LicenseModel{}
 
 /// <summary>The direction to sort news items by published date, and then id.</summary>
 public enum SortDirection
