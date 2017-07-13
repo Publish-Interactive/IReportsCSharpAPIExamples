@@ -62,8 +62,8 @@ namespace IReportsApiExamples.Examples
         /// <param name="endDate">The end date</param>
         private static IEnumerable<T> GetValidLicenses<T>(
             List<T> licenses,
-            System.DateTime startDate,
-            System.DateTime endDate)
+            DateTime startDate,
+            DateTime endDate)
         where T : LicenseModel
         {
             foreach (var license in licenses)

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Examples;
 using IReportsApiExamples.Examples;
 using Newtonsoft.Json;
@@ -22,8 +23,8 @@ namespace IReportsApiExamples
                 await GetValidLicensesForUser.DoWork(
                     wrapper,
                     "USERNAME",
-                    new System.DateTime(2017, 07, 13),
-                    new System.DateTime(2017, 07, 13)
+                    new DateTime(2017, 07, 13),
+                    new DateTime(2017, 07, 13)
                 );
 
                 await ImportCategoriesAndProducts.DoWork(
@@ -56,11 +57,11 @@ namespace IReportsApiExamples
         private static void SerializeEnumsToStringByDefault()
         {
             JsonConvert.DefaultSettings = () =>
-                        {
-                            var settings = new JsonSerializerSettings();
-                            settings.Converters.Add(new StringEnumConverter());
-                            return settings;
-                        };
+                    {
+                        var settings = new JsonSerializerSettings();
+                        settings.Converters.Add(new StringEnumConverter());
+                        return settings;
+                    };
         }
     }
 }
