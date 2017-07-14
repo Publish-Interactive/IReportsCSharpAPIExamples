@@ -20,6 +20,14 @@ namespace IReportsApiExamples
             using (var wrapper = await MakeAuthenticatedClient.DoWork(
                 "BASE_URL/api/v1/", "USERNAME", "PASSWORD"))
             {
+                await AddReportLicense.DoWork(
+                    wrapper,
+                    "USERNAME",
+                    "REPORT_CODE",
+                    new DateTime(2017, 07, 13),
+                    new DateTime(2017, 07, 13)
+                );
+                                
                 await GetValidLicensesForUser.DoWork(
                     wrapper,
                     "USERNAME",
